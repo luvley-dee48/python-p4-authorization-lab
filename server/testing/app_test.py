@@ -53,12 +53,11 @@ class TestApp:
                 'username': user.username
             })
 
-            article_id = Article.query.with_entities(Article.id).first()[0]
-
+            article_id = Article.query.filter_by(is_member_only=True).first().id
             response = client.get(f'/members_only_articles/{article_id}')
-            assert(response.status_code == 200)
+            assert response.status_code == 200
 
             client.delete('/logout')
 
             response = client.get(f'/members_only_articles/{article_id}')
-            assert(response.status_code == 401)
+            assert response.status_code == 401
